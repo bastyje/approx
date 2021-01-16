@@ -50,9 +50,8 @@ double derivative3Hermite(double x, int level)
 
     return 6 * derivative2Hermite(x, level - 1) + 2 * x * derivative3Hermite(x, level - 1) - 2 * (level - 1) * derivative3Hermite(x, level - 2);
 }
-}
 
-void make_spl(points_t, spline_t *spl)
+void make_spl(points_t *pts, spline_t *spl)
 {
     matrix_t *eqs = NULL;
     double *x = pts->x;
@@ -83,7 +82,7 @@ void make_spl(points_t, spline_t *spl)
     if (alloc_spl(spl, nb)) {
         for (i = 0; i < spl->n; i++) {
             double xx = spl->x[i] = a + i * (b - a) / (spl->n - 1);
-            x += 10.0 * DBL_EPSILON;
+            xx += 10.0 * DBL_EPSILON;
             spl->f[i] = 0;
             spl->f1[i] = 0;
             spl->f2[i] = 0;
