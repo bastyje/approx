@@ -1,5 +1,5 @@
 aprox: main.o splines.o points.o aproksymator_na_bazie.o src/gaus/libge.a
-	$(CC) -o bin/aprox  bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/aproksymator_na_bazie.o -L src/gaus -l ge
+	$(CC) -o bin/aprox  bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/lst_sqrs_approx.o -L src/gaus -l ge
 
 intrp: main.o splines.o points.o interpolator.o src/gaus/libge.a
 	$(CC) -o bin/intrp  bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/interpolator.o -L src/gaus -l ge
@@ -19,8 +19,8 @@ splines.o: src/splines.h
 points.o: src/points.h
 	$(CC) -I src -c src/points.c -o bin/obj/points.o
 
-aproksymator_na_bazie.o: src/makespl.h src/points.h src/gaus/piv_ge_solver.h
-	$(CC) -I src/gaus -I src -c src/aproksymator_na_bazie.c -o bin/obj/aproksymator_na_bazie.o
+lst_sqrs_approx.o: src/makespl.h src/points.h src/gaus/piv_ge_solver.h
+	$(CC) -I src/gaus -I src -c src/lst_sqrs_approx.c -o bin/obj/lst_sqrs_approx.o
 
 interpolator.o: src/makespl.h src/points.h src/gaus/piv_ge_solver.h
 	$(CC) -I src/gaus  -I src -c src/interpolator.c -o bin/obj/interpolator.o

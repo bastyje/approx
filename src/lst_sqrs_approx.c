@@ -2,8 +2,8 @@
 #include "piv_ge_solver.h"
 
 #include <stdlib.h>
+#include <float.h>
 
-#include "makespl.h"
 
 double funHermite(double x, int level)
 {
