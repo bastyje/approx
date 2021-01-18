@@ -277,6 +277,27 @@ void make_spl(points_t *pts, spline_t *spl)
 
     eqs = make_matrix(nb, nb + 1);
 
+#ifdef DEBUG
+#define TESTBASE 500
+	{
+		FILE           *tst = fopen("debug_base_plot.txt", "w");
+		double		dx = (b - a) / (TESTBASE - 1);
+		for( j= 0; j < nb; j++ )
+			xfi( a, b, nb, j, tst );
+		for (i = 0; i < TESTBASE; i++) {
+			fprintf(tst, "%g", a + i * dx);
+			for (j = 0; j < nb; j++) {
+				fprintf(tst, " %g", fi  (a, b, nb, j, a + i * dx));
+				fprintf(tst, " %g", dfi (a, b, nb, j, a + i * dx));
+				fprintf(tst, " %g", d2fi(a, b, nb, j, a + i * dx));
+				fprintf(tst, " %g", d3fi(a, b, nb, j, a + i * dx));
+			}
+			fprintf(tst, "\n");
+		}
+		fclose(tst);
+	}
+#endif
+
     for (i = 0; i < nb; i++) {
         for (j = 0; j < nb; j++) 
             for (k = 0; k < pts->n; k++)
@@ -285,10 +306,18 @@ void make_spl(points_t *pts, spline_t *spl)
             add_to_entry_matrix(eqs, i, nb, y[j] * valueHermite(x[j], i));
     }
 
+#ifdef DEBUG
+	write_matrix(eqs, stdout);
+#endif
+
     if (piv_ge_solver(eqs)) {
         spl->n = 0;
         return;
     }
+
+#ifdef DEBUG
+	write_matrix(eqs, stdout);
+#endif
 
     if (alloc_spl(spl, nb)) {
         for (i = 0; i < spl->n; i++) {
@@ -307,4 +336,26 @@ void make_spl(points_t *pts, spline_t *spl)
             }
         }
     }
+
+#ifdef DEBUG
+	{
+		FILE           *tst = fopen("debug_spline_plot.txt", "w");
+		double		dx = (b - a) / (TESTBASE - 1);
+		for (i = 0; i < TESTBASE; i++) {
+			double yi= 0;
+			double dyi= 0;
+			double d2yi= 0;
+			double d3yi= 0;
+			double xi= a + i * dx;
+			for( k= 0; k < nb; k++ ) {
+							yi += get_entry_matrix(eqs, k, nb) * fi(a, b, nb, k, xi);
+							dyi += get_entry_matrix(eqs, k, nb) * dfi(a, b, nb, k, xi);
+							d2yi += get_entry_matrix(eqs, k, nb) * d2fi(a, b, nb, k, xi);
+							d3yi += get_entry_matrix(eqs, k, nb) * d3fi(a, b, nb, k, xi);
+			}
+			fprintf(tst, "%g %g %g %g %g\n", xi, yi, dyi, d2yi, d3yi );
+		}
+		fclose(tst);
+	}
+#endif
 }
