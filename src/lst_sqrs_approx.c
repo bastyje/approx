@@ -282,15 +282,13 @@ void make_spl(points_t *pts, spline_t *spl)
 	{
 		FILE           *tst = fopen("debug_base_plot.txt", "w");
 		double		dx = (b - a) / (TESTBASE - 1);
-		for( j= 0; j < nb; j++ )
-			xfi( a, b, nb, j, tst );
 		for (i = 0; i < TESTBASE; i++) {
 			fprintf(tst, "%g", a + i * dx);
 			for (j = 0; j < nb; j++) {
-				fprintf(tst, " %g", fi  (a, b, nb, j, a + i * dx));
-				fprintf(tst, " %g", dfi (a, b, nb, j, a + i * dx));
-				fprintf(tst, " %g", d2fi(a, b, nb, j, a + i * dx));
-				fprintf(tst, " %g", d3fi(a, b, nb, j, a + i * dx));
+				fprintf(tst, " %g", valueHermite(a + i * dx, j));
+				fprintf(tst, " %g", valueDerivative1(a + i * dx, j));
+				fprintf(tst, " %g", valueDerivative2(a + i * dx, j));
+				fprintf(tst, " %g", valueDerivative3(a + i * dx, j));
 			}
 			fprintf(tst, "\n");
 		}
@@ -348,10 +346,10 @@ void make_spl(points_t *pts, spline_t *spl)
 			double d3yi= 0;
 			double xi= a + i * dx;
 			for( k= 0; k < nb; k++ ) {
-							yi += get_entry_matrix(eqs, k, nb) * fi(a, b, nb, k, xi);
-							dyi += get_entry_matrix(eqs, k, nb) * dfi(a, b, nb, k, xi);
-							d2yi += get_entry_matrix(eqs, k, nb) * d2fi(a, b, nb, k, xi);
-							d3yi += get_entry_matrix(eqs, k, nb) * d3fi(a, b, nb, k, xi);
+							yi += get_entry_matrix(eqs, k, nb) * valueHermite(xi, k);
+							dyi += get_entry_matrix(eqs, k, nb) * valueDerivative1(xi, k);
+							d2yi += get_entry_matrix(eqs, k, nb) * valueDerivative2(xi, k);
+							d3yi += get_entry_matrix(eqs, k, nb) * valueDerivative3(xi, k);
 			}
 			fprintf(tst, "%g %g %g %g %g\n", xi, yi, dyi, d2yi, d3yi );
 		}
