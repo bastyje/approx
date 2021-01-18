@@ -3,10 +3,11 @@
 
 #include <stdlib.h>
 #include <float.h>
-
+#include <stdio.h>
 
 double funHermite(double x, int level)
 {
+    printf("%d\n", level);
     if (level == 0)
     {
         return 1;
