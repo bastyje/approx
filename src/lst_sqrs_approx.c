@@ -8,7 +8,6 @@
 
 double funHermite(double x, int level, double **funk)
 {
-    printf("%d\n", level);
     if (level == 0)
     {
         return 1.0;
@@ -317,7 +316,7 @@ void make_spl(points_t *pts, spline_t *spl)
 	write_matrix(eqs, stdout);
 #endif
 
-    if (alloc_spl(spl, nb)) {
+    if (alloc_spl(spl, nb) == 0) {
         for (i = 0; i < spl->n; i++) {
             double xx = spl->x[i] = a + i * (b - a) / (spl->n - 1);
             xx += 10.0 * DBL_EPSILON;
