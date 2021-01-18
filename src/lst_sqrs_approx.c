@@ -21,6 +21,7 @@ double funHermite(double x, int level, double **funk)
     if (isnan(funk[0][level - 1]))
     {
         funk[0][level - 1] = funHermite(x, level - 1, funk);
+        
     }
 
     temp1 = funk[0][level - 1];
@@ -141,20 +142,30 @@ double derivative3Hermite(double x, int level, double **funk)
 
 double valueHermite(double x, int level)
 {
-    double **valueHermite = malloc(sizeof(double*)*4);
+    double **valueTabHermite = malloc(sizeof(double*)*4);
     int i = 0;
     for(i = 0; i < 4; i++)
     {
-        valueHermite[i] = malloc(sizeof(double)*level);
+        valueTabHermite[i] = malloc(sizeof(double)*level);
     } 
 
-    double result = funHermite(x, level, valueHermite);
+    int j;
+
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < level; j++)
+        {
+            valueTabHermite[i][j] = NAN;
+        }
+    }
+
+    double result = funHermite(x, level, valueTabHermite);
 
     for(i = 0; i < 4; i++)
     {
-        free(valueHermite[i]);
+        free(valueTabHermite[i]);
     }
-    free(valueHermite);
+    free(valueTabHermite);
 
     return result;
 }
@@ -167,6 +178,16 @@ double valueDerivative1(double x, int level)
     {
         valueHermite[i] = malloc(sizeof(double)*level);
     } 
+
+    int j;
+
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < level; j++)
+        {
+            valueHermite[i][j] = NAN;
+        }
+    }
 
     double result = derivative1Hermite(x, level, valueHermite);
 
@@ -188,6 +209,16 @@ double valueDerivative2(double x, int level)
         valueHermite[i] = malloc(sizeof(double)*level);
     } 
 
+    int j;
+
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < level; j++)
+        {
+            valueHermite[i][j] = NAN;
+        }
+    }
+
     double result = derivative2Hermite(x, level, valueHermite);
 
     for(i = 0; i < 4; i++)
@@ -207,6 +238,16 @@ double valueDerivative3(double x, int level)
     {
         valueHermite[i] = malloc(sizeof(double)*level);
     } 
+
+    int j;
+
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < level; j++)
+        {
+            valueHermite[i][j] = NAN;
+        }
+    }
 
     double result = derivative3Hermite(x, level, valueHermite);
 
