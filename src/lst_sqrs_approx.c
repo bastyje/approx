@@ -261,7 +261,7 @@ double valueDerivative3(double x, int level)
     return result;
 }
 
-void make_spl(points_t *pts, spline_t *spl, int n)
+void make_spl(points_t *pts, spline_t *spl)
 {
     matrix_t *eqs = NULL;
     double *x = pts->x;
@@ -289,7 +289,7 @@ void make_spl(points_t *pts, spline_t *spl, int n)
         return;
     }
 
-    if (alloc_spl(spl, n) == 0) {
+    if (alloc_spl(spl, spl->m) == 0) {
         for (i = 0; i < spl->n; i++) {
             double xx = spl->x[i] = a + i * (b - a) / (spl->n - 1);
             xx += 10.0 * DBL_EPSILON;

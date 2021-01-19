@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 char *usage =
-  "Usage: %s -s spline-file [-p points-file] [ -g gnuplot-file [-f from_x -t to_x -n n_points ] ]\n"
+  "Usage: %s -s spline-file [-p points-file] [ -g gnuplot-file [-f from_x -t to_x -n n_points -m n_parts ] ]\n"
   "            if points-file is given then\n"
   "               reads discrete 2D points from points-file\n"
   "               writes spline approximation to spline-file\n"
@@ -21,6 +21,8 @@ char *usage =
   "               - to_x defaults to x-coordinate of the last point\n"
   "               - n_points defaults to 100\n"
   "               - n_points must be > 1\n"
+  "               - n_parts defaults to n\n"
+  "               - n_parts must be > 1\n"
   "            endif\n";
 
 int
@@ -40,9 +42,10 @@ main (int argc, char **argv)
 
   pts.n = 0;
   spl.n = 0;
+  spl.m = 0;
 
   /* process options, save user choices */
-  while ((opt = getopt (argc, argv, "p:s:g:f:t:n:")) != -1) {
+  while ((opt = getopt (argc, argv, "p:s:g:f:t:n:m:")) != -1) {
     switch (opt) {
     case 'p':
       inp = optarg;
@@ -59,6 +62,9 @@ main (int argc, char **argv)
     case 't':
       toX = atof (optarg);
       break;
+    case 'm':
+      spl.m = atoi (optarg);
+      break;
     case 'n':
       n = atoi (optarg);
       break;
@@ -67,6 +73,7 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
   }
+    if (spl.m == 0) spl.m = n;
 	if( optind < argc ) {
 		fprintf( stderr, "\nBad parameters!\n" );
 		for( ; optind < argc; optind++ )
@@ -100,7 +107,12 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-    make_spl (&pts, &spl);
+    if (spl.m > 0) 
+            make_spl (&pts, &spl);
+    else {
+      fprintf (stderr, "%s: wrong number of sections number: %d\n\n", argv[0], spl.m);
+      exit(EXIT_FAILURE);
+    }     
 
     if( spl.n > 0 )
 			write_spl (&spl, ouf);
