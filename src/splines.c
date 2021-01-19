@@ -4,6 +4,7 @@
 
 #define MALLOC_FAILED(P, SIZE) (((P) = malloc((SIZE) * sizeof(*(P)))) == NULL)
 
+
 int alloc_spl(spline_t *spl, int n)
 {
   spl->n = n;
