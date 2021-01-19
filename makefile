@@ -8,10 +8,7 @@ prosta: main.o splines.o points.o prosta.o
 	$(CC) -o bin/prosta  bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/prosta.o	
 
 gen:
-	$(CC) -o bin/gen src/gen/gen.c
-
-debug: main.o splines.o points.o lst_sqrs_approx.o src/gaus/libge.a
-	$(CC) -o bin/aprox -ggdb bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/lst_sqrs_approx.o -L src/gaus -l ge
+	$(CC) -o bin/gen src/gen/gen.c -lm
 
 main.o: src/points.h src/splines.h src/makespl.h
 	$(CC) -I src -c src/main.c -o bin/obj/main.o
