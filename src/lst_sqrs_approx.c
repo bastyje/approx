@@ -275,6 +275,7 @@ void make_spl(points_t *pts, spline_t *spl)
     if (nbEnv != NULL && atoi(nbEnv) > 0) nb = atoi(nbEnv);
 
     eqs = make_matrix(nb, nb + 1);
+    
 
 #ifdef DEBUG
 #define TESTBASE 500
