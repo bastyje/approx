@@ -1,31 +1,44 @@
-aprox: main.o splines.o points.o lst_sqrs_approx.o src/gaus/libge.a
-	$(CC) -o bin/aprox  bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/lst_sqrs_approx.o -L src/gaus -l ge
+OBJDIR=bin/obj/
+TARGETDIR=bin/
+SRCDIR=src/
 
-intrp: main.o splines.o points.o interpolator.o src/gaus/libge.a
-	$(CC) -o bin/intrp  bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/interpolator.o -L src/gaus -l ge
+$(TARGETDIR)aprox: $(OBJDIR)main.o $(OBJDIR)splines.o $(OBJDIR)points.o $(OBJDIR)lst_sqrs_approx.o $(SRCDIR)gaus/libge.a
+	$(CC) -o $@  $^ -L src/gaus -l ge 
 
-prosta: main.o splines.o points.o prosta.o
-	$(CC) -o bin/prosta  bin/obj/main.o bin/obj/splines.o bin/obj/points.o bin/obj/prosta.o	
+$(TARGETDIR)aprox_baza: $(OBJDIR)main.o $(OBJDIR)splines.o $(OBJDIR)points.o $(OBJDIR)aproksymator_na_bazie.o $(SRCDIR)gaus/libge.a
+	$(CC) -o $@  $^ -L src/gaus -l ge 
 
-gen:
-	$(CC) -o bin/gen src/gen/gen.c -lm
+$(TARGETDIR)intrp: $(OBJDIR)main.o $(OBJDIR)splines.o $(OBJDIR)points.o $(OBJDIR)interpolator.o $(SRCDIR)gaus/libge.a
+	$(CC) -o $@  $^ -L src/gaus -l ge 
 
-main.o: src/points.h src/splines.h src/makespl.h
-	$(CC) -I src -c src/main.c -o bin/obj/main.o
+$(TARGETDIR)prosta: $(OBJDIR)main.o $(OBJDIR)splines.o $(OBJDIR)points.o $(OBJDIR)prosta.o
+	$(CC) -o $@  $^
 
-splines.o: src/splines.h
-	$(CC) -I src -c src/splines.c -o bin/obj/splines.o
+$(TARGETDIR)gen:
+	$(CC) -o $@ $(SRCDIR)gen/gen.c -lm
 
-points.o: src/points.h
-	$(CC) -I src -c src/points.c -o bin/obj/points.o
+$(OBJDIR)main.o: $(SRCDIR)points.h $(SRCDIR)splines.h $(SRCDIR)makespl.h
+	$(CC) -I $(SRCDIR) -c $(SRCDIR)main.c -o $@
 
-lst_sqrs_approx.o: src/makespl.h src/points.h src/gaus/piv_ge_solver.h
-	$(CC) -I src/gaus -I src -c src/lst_sqrs_approx.c -o bin/obj/lst_sqrs_approx.o
+$(OBJDIR)splines.o: $(SRCDIR)splines.h
+	$(CC) -I $(SRCDIR) -c $(SRCDIR)splines.c -o $@
 
-interpolator.o: src/makespl.h src/points.h src/gaus/piv_ge_solver.h
-	$(CC) -I src/gaus  -I src -c src/interpolator.c -o bin/obj/interpolator.o
+$(OBJDIR)points.o: $(SRCDIR)points.h
+	$(CC) -I $(SRCDIR) -c $(SRCDIR)points.c -o $@
+
+$(OBJDIR)lst_sqrs_approx.o: $(SRCDIR)makespl.h $(SRCDIR)points.h $(SRCDIR)gaus/piv_ge_solver.h
+	$(CC) -I $(SRCDIR)gaus -I $(SRCDIR) -c $(SRCDIR)lst_sqrs_approx.c -o $@
+
+$(OBJDIR)interpolator.o: $(SRCDIR)makespl.h $(SRCDIR)points.h $(SRCDIR)gaus/piv_ge_solver.h
+	$(CC) -I $(SRCDIR)gaus  -I $(SRCDIR) -c $(SRCDIR)interpolator.c -o $@
+
+$(OBJDIR)aproksymator_na_bazie.o: $(SRCDIR)makespl.h $(SRCDIR)points.h $(SRCDIR)gaus/piv_ge_solver.h
+	$(CC) -I $(SRCDIR)gaus -I $(SRCDIR) -c $(SRCDIR)aproksymator_na_bazie.c -o $@
+
+$(OBJDIR)prosta.o: $(SRCDIR)makespl.h $(SRCDIR)points.h
+	$(CC) -I $(SRCDIR)gaus -I $(SRCDIR) -c $(SRCDIR)prosta.c -o $@
 
 .PHONY: clean
 
 clean:
-	-rm bin/obj/*.o bin/aprox bin/intrp bin/prosta bin/gen
+	-rm $(OBJDIR)*.o $(TARGETDIR)aprox $(TARGETDIR)intrp $(TARGETDIR)prosta $(TARGETDIR)gen $(TARGETDIR)aprox_baza
