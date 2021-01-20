@@ -14,8 +14,8 @@ $(TARGETDIR)intrp: $(OBJDIR)main.o $(OBJDIR)splines.o $(OBJDIR)points.o $(OBJDIR
 $(TARGETDIR)prosta: $(OBJDIR)main.o $(OBJDIR)splines.o $(OBJDIR)points.o $(OBJDIR)prosta.o
 	$(CC) -o $@  $^
 
-$(TARGETDIR)gen:
-	$(CC) -o $@ $(SRCDIR)gen/gen.c -lm
+$(TARGETDIR)gen: $(SRCDIR)gen/gen.c
+	$(CC) -o $@  $^ -lm
 
 $(OBJDIR)main.o: $(SRCDIR)points.h $(SRCDIR)splines.h $(SRCDIR)makespl.h
 	$(CC) -I $(SRCDIR) -c $(SRCDIR)main.c -o $@
