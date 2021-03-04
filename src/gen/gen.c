@@ -8,6 +8,11 @@ double fsin(double x) {
         return (1 + r) * sin(x);
 }
 
+double fx(double x) {
+        double r= ((double)rand() - RAND_MAX/2.0)/RAND_MAX/5; // +-10%
+        return (1 + r) * x;
+}
+
 double fun(double x) {
         double r= ((double)rand() - RAND_MAX/2.0)/RAND_MAX/5; // +-10%
         return (1+r)*(10*x*x*x*x+5*x*x*x+x*x);
@@ -26,7 +31,7 @@ int main(int argc, char **argv) {
         double dx = (b-a)/(n-1);
 
         for (i =0; i < n; i++) {
-                fprintf(out, "%g %g\n", a+i*dx, fsin(a+i*dx));
+                fprintf(out, "%g %g\n", a+i*dx, fun(a+i*dx));
         }
         fclose(out);
 
